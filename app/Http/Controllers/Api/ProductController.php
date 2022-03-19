@@ -33,10 +33,10 @@ class ProductController extends Controller
             ], 201);
     }
 
-    public function update($id){
+    public function update(Request $request, $id){
         $product = Product::find($id);
-        $product->name = "desgraça enlantada";
-        $product->save();
+        $productAlt = $request->all();
+        $product->update($productAlt);
     }
 
     public function remove($id){
