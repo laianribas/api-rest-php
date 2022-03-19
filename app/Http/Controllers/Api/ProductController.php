@@ -8,42 +8,71 @@ use App\Http\Controllers\Controller;
 
 class ProductController extends Controller
 {
-    public function selectAll(){
+    public function selectAll(Request $request){
         $product = Product::all();
-        return response()->json([
-            'product' => $product,
+        if($request->Header('Accept') == 'application/json'){
+            return response()->json([
+                'product' => $product,
+                ], 202);
+        }else if($request->Header('Accept') == 'application/xml'){
+            return response()->xml([
+                'product' => $product,
             ], 202);
+        }
     }
 
-    public function selectOne($id){
+    public function selectOne(Request $request, $id){
         $product = Product::find($id);
-        return response()->json([
-            'product' => $product,
+        if($request->Header('Accept') == 'application/json'){
+            return response()->json([
+                'product' => $product,
+                ], 202);
+        }else if($request->Header('Accept') == 'application/xml'){
+            return response()->xml([
+                'product' => $product,
             ], 202);
+        }
     }
 
     public function insert(Request $request){
-        $product = new Product;
-        $product->name = $request->name;
-        $product->price = $request->price;
-        $product->description = $request->description;
-        $product->save();
-        return response()->json([
-            'product' => $product,
+        $product = Product::create($request->all());
+        if($request->Header('Accept') == 'application/json'){
+            return response()->json([
+                'product' => $product,
+                ], 201);
+        }else if($request->Header('Accept') == 'application/xml'){
+            return response()->xml([
+                'product' => $product,
             ], 201);
+        }
     }
 
     public function update(Request $request, $id){
         $product = Product::find($id);
         $productAlt = $request->all();
         $product->update($productAlt);
+        if($request->Header('Accept') == 'application/json'){
+            return response()->json([
+                'product' => $product,
+                ], 201);
+        }else if($request->Header('Accept') == 'application/xml'){
+            return response()->xml([
+                'product' => $product,
+            ], 201);
+        }
     }
 
-    public function remove($id){
+    public function remove(Request $request, $id){
         $product = Product::find($id);
         $product->delete();
-        return response()->json([
-            'product' => $product,
-            ], 204);
+        if($request->Header('Accept') == 'application/json'){
+            return response()->json([
+                'product' => $product,
+                ], 200);
+        }else if($request->Header('Accept') == 'application/xml'){
+            return response()->xml([
+                'product' => $product,
+            ], 200);
+        }
     }
 }
